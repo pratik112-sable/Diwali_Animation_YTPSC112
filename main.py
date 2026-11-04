@@ -3,7 +3,7 @@
 # ///
 
 import asyncio
-import pygame
+import pygame.base
 
 from Diwali import main
 
