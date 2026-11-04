@@ -5,6 +5,7 @@ Optional: python diwali_animation_ultimate.py --name "Your Name" --quality high
 All artwork is generated in code. No images, fonts or audio downloads required.
 """
 import argparse
+import asyncio
 import math
 import random
 import time
@@ -415,7 +416,7 @@ class Studio:
                         self.toast='Snapshot failed: '+str(exc)[:65]
                     self.toast_until=time.monotonic()+3
 
-    def run(self):
+    async def run(self):
         try:
             while self.running:
                 dt=min(self.clock.tick(60)/1000,.05)
@@ -423,15 +424,16 @@ class Studio:
                 if not self.paused:
                     self.update(dt)
                 self.draw()
+                await asyncio.sleep(0)
         finally:
             pygame.quit()
 
-def main():
+async def main():
     parser=argparse.ArgumentParser(description='An interactive, procedurally drawn Diwali celebration.')
     parser.add_argument('--name',default='',help='Personal greeting signature')
     parser.add_argument('--quality',choices=['high','low'],default='high',help='Use low on slower machines')
     args=parser.parse_args()
-    Studio(args.name,args.quality).run()
+    await Studio(args.name,args.quality).run()
 
 if __name__=='__main__':
-    main()
+    asyncio.run(main())
